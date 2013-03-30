@@ -7,29 +7,81 @@ def path(num, field)
   @doc.xpath("//span[@id='ctl00_PlaceHolderContentWrapper_PlaceHolderMain_editmodepanel2_UserControlFieldControl2_ctl00_lvBurner_ctrl#{num}_#{field}']")
 end
 
-manufacturers = Array.new
-models = Array.new
+@manufacturers = Array.new
+@models = Array.new
 i = 0
 until path(i, "ApplianceName").empty?
-	models[i] = path(i, "ApplianceName").text
+	@models[i] = path(i, "ApplianceName").text
+	@manufacturers[i] = nil
 	unless path(i, "ClientName").empty?
-		manufacturers[i] = path(i, "ClientName").text
+		@manufacturers[i] = path(i, "ClientName").text
 	end
   i += 1
 end
 
-puts "#{manufacturers.count} manufacturers added to array."
-puts "#{models.count} woodburners added to array."
+puts "#{@manufacturers.count} manufacturers added to array."
+puts "#{@models.count} woodburners added to array."
+mod_manufacturers = @manufacturers.compact.uniq
+puts "#{@manufacturers.count} manufacturers."
+puts "#{@manufacturers.compact.count} non-nil manufacturers."
+puts "#{mod_manufacturers.count} unique non-nil manufacturers."
 
-puts manufacturers.compact.index
-
-manufacturers.each do |num|
-  unless num == nil
-  	puts "#{manufacturers.index(num)}: #{num}"
-  end
+def manufacturers_complete
+	for i in 0...@manufacturers.count
+		if @manufacturers[i] == nil
+			@manufacturers[i] = @manufacturers[i - 1]
+		end
+		i += 1
+	end
 end
 
-#i = 0
-#until path(i, "ApplianceName").empty?
-#	if manufacturers[i]
-#end
+manufacturers_complete
+puts @manufacturers.compact.inspect
+
+# list models and index
+def list_manufacturers
+	@manufacturers.each do |manufacturer|
+		unless manufacturer == nil
+			puts "#{@manufacturers.index(manufacturer)}: #{manufacturer}"
+		end
+	end
+end
+
+# list models and index
+def list_models
+	@models.each do |model|
+		puts "#{@models.index(model)}: #{model}"
+	end
+end
+
+# list_models
+a1 = ['apple', 1, 'banana', 2]
+h1 = Hash[*a1.flatten]
+puts "h1: #{h1.inspect}"
+
+a2 = [['apple', 1], ['banana', 2]]
+h2 = Hash[*a2.flatten]
+puts "h2: #{h2.inspect}"
+
+__END__
+	
+manufacturers.each do |manufacturer|
+  unless manufacturer == nil
+	  puts manufacturer
+	  puts "======================================"
+	  puts models[0..16]
+	  #puts models[manufacturers.index(manufacturer)]
+    
+
+    #models.each do
+	  #	while manufacturers.index(manufacturer).to_i < 17
+	  #	if models.index(model) == manufacturers.index(manufacturer)
+	  #	if models.index(model) < manufacturers.index(manufacturer)
+		 # 	until manufacturer != nil
+		 # 		puts models[manufacturers.index(manufacturer).to_i]
+		  #	end
+		  #end
+	  #end
+	  puts "\n"
+  end
+end
