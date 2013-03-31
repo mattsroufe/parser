@@ -12,7 +12,7 @@ end
 i = 0
 until path(i, "ApplianceName").empty?
 	@models[i] = path(i, "ApplianceName").text
-	@manufacturers[i] = nil
+	@manufacturers.push(i)
 	unless path(i, "ClientName").empty?
 		@manufacturers[i] = path(i, "ClientName").text
 	end
@@ -28,22 +28,20 @@ puts "#{mod_manufacturers.count} unique non-nil manufacturers."
 
 def manufacturers_complete
 	for i in 0...@manufacturers.count
-		if @manufacturers[i] == nil
+		if @manufacturers[i].class == Fixnum
 			@manufacturers[i] = @manufacturers[i - 1]
+			# @manufacturers[i] = "Manufacturer_#{i}"
 		end
 		i += 1
 	end
 end
 
 manufacturers_complete
-puts @manufacturers.compact.inspect
 
 # list models and index
 def list_manufacturers
 	@manufacturers.each do |manufacturer|
-		unless manufacturer == nil
 			puts "#{@manufacturers.index(manufacturer)}: #{manufacturer}"
-		end
 	end
 end
 
@@ -54,7 +52,18 @@ def list_models
 	end
 end
 
-# list_models
+# list manufacturers and models
+def make_and_model
+	for i in 0...@manufacturers.count
+		puts "#{i}. #{@manufacturers[i]}: #{@models[i]}"
+		i += 1
+	end
+end
+
+make_and_model
+
+__END__
+
 a1 = ['apple', 1, 'banana', 2]
 h1 = Hash[*a1.flatten]
 puts "h1: #{h1.inspect}"
@@ -63,8 +72,6 @@ a2 = [['apple', 1], ['banana', 2]]
 h2 = Hash[*a2.flatten]
 puts "h2: #{h2.inspect}"
 
-__END__
-	
 manufacturers.each do |manufacturer|
   unless manufacturer == nil
 	  puts manufacturer
