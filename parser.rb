@@ -73,55 +73,59 @@ def make_and_model_2
 	end
 end
 
+@h = Hash.new
 def arrays_to_hash
-	h = Hash.new
 	for i in 0...@manufacturers.count
 		if @manufacturers[i - 1] == @manufacturers[i]
-			h[@manufacturers[i]] << @models[i]
+			@h[@manufacturers[i]] << @models[i]
 		else
-			h[@manufacturers[i]] = []
-			h[@manufacturers[i]] << @models[i]
+			@h[@manufacturers[i]] = []
+			@h[@manufacturers[i]] << @models[i]
 		end
 		i += 1		
 	end
-	puts h
 end
 
-make_and_model_2
-puts "\n"
+def list_hash
+	# puts h.keys.inspect
+	# puts h.values.inspect
+	@h.each do |k, v| 
+		puts "\n#{k}"
+		puts "======================================"
+		# puts "#{v}\n"
+		v.each do |model|
+			puts model
+		end
+	end
+end
+
 arrays_to_hash
+# list_hash
+puts @h
 
 __END__
 
+class Article
+  attr_accessor :name, :month
 
-
-
-
-a1 = ['apple', 1, 'banana', 2]
-h1 = Hash[*a1.flatten]
-puts "h1: #{h1.inspect}"
-
-a2 = [['apple', 1], ['banana', 2]]
-h2 = Hash[*a2.flatten]
-puts "h2: #{h2.inspect}"
-
-manufacturers.each do |manufacturer|
-  unless manufacturer == nil
-	  puts manufacturer
-	  puts "======================================"
-	  puts models[0..16]
-	  #puts models[manufacturers.index(manufacturer)]
-    
-
-    #models.each do
-	  #	while manufacturers.index(manufacturer).to_i < 17
-	  #	if models.index(model) == manufacturers.index(manufacturer)
-	  #	if models.index(model) < manufacturers.index(manufacturer)
-		 # 	until manufacturer != nil
-		 # 		puts models[manufacturers.index(manufacturer).to_i]
-		  #	end
-		  #end
-	  #end
-	  puts "\n"
+  def initialize(name, month)
+    @name = name
+    @month = month
   end
 end
+
+articles = [
+  Article.new("Article1", "Feb"), 
+  Article.new("Article2", "Feb"), 
+  Article.new("Article3", "Feb"), 
+  Article.new("Article4", "Mar"), 
+  Article.new("Article5", "Mar"), 
+]
+
+months = {}
+articles.each do |a|
+  months[a.month] ||= []
+  months[a.month] << a.name
+end
+
+p months
