@@ -60,9 +60,42 @@ def make_and_model
 	end
 end
 
-make_and_model
+def make_and_model_2
+	for i in 0...@manufacturers.count
+		if @manufacturers[i - 1] == @manufacturers[i]
+			puts @models[i]
+		else
+			puts "\n#{@manufacturers[i]}"
+			puts "======================================"
+			puts @models[i]
+		end
+		i += 1
+	end
+end
+
+def arrays_to_hash
+	h = Hash.new
+	for i in 0...@manufacturers.count
+		if @manufacturers[i - 1] == @manufacturers[i]
+			h[@manufacturers[i]] << @models[i]
+		else
+			h[@manufacturers[i]] = []
+			h[@manufacturers[i]] << @models[i]
+		end
+		i += 1		
+	end
+	puts h
+end
+
+make_and_model_2
+puts "\n"
+arrays_to_hash
 
 __END__
+
+
+
+
 
 a1 = ['apple', 1, 'banana', 2]
 h1 = Hash[*a1.flatten]
